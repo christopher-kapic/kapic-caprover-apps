@@ -71,5 +71,5 @@ caproverOneClickApp:
             GoTrue has been successfully deployed!
     displayName: Supabase GoTrue
     isOfficial: false
-    description: An open source authentication system developed by Netlify, forked by Supabase.
+    description: IN DEVELOPMENT | An open source authentication system developed by Netlify, forked by Supabase.
     documentation: See https://github.com/supabase/gotrue
