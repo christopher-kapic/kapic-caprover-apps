@@ -2,19 +2,16 @@ captainVersion: 4
 services:
     # GoTrue
     $$cap_appname:
-        image: supabase/gotrue:$$cap_gotrue_version
-        # ports:
-        #     - ${AUTH_PORT}
         depends_on:
             - $$cap_appname-db
-        restart: always
-        environment:
+        image: supabase/gotrue:latest
+        environment: # Need to finish, currently from supabase's docker-compose
             GOTRUE_JWT_SECRET: ${JWT_SECRET}
             GOTRUE_JWT_EXP: 3600
             GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
             GOTRUE_DB_DRIVER: postgres
             DB_NAMESPACE: auth
-            API_EXTERNAL_URL: http://localhost:8000
+            API_EXTERNAL_URL: localhost
             GOTRUE_API_HOST: 0.0.0.0
             PORT: ${AUTH_PORT}
 
@@ -22,40 +19,53 @@ services:
             GOTRUE_SMTP_PORT: ${SMTP_PORT}
             GOTRUE_SMTP_USER: ${SMTP_USER}
             GOTRUE_SMTP_PASS: ${SMTP_PASS}
-            GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL}
 
             GOTRUE_DISABLE_SIGNUP: 'false'
-            GOTRUE_SITE_URL: http://localhost:8000
-            GOTRUE_MAILER_URLPATHS_INVITE: /auth/v1/verify
-            GOTRUE_MAILER_URLPATHS_CONFIRMATION: /auth/v1/verify
-            GOTRUE_MAILER_URLPATHS_RECOVERY: /auth/v1/verify
+            GOTRUE_SITE_URL: localhost
             GOTRUE_MAILER_AUTOCONFIRM: 'true'
             GOTRUE_LOG_LEVEL: DEBUG
             GOTRUE_OPERATOR_TOKEN: ${OPERATOR_TOKEN}
             DATABASE_URL: 'postgres://postgres:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/postgres?sslmode=disable'
+
+
         caproverExtra:
             containerHttpPort: '8080'
+    # MariaDB
     $$cap_appname-db:
-        image: postgres:13.3
+        image: mariadb:10
+        environment: # Need to finish
+            VAR: '$$cap_variable'
+            POSTGRES_DB: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_PORT: ${POSTGRES_PORT}
+
+
+
+
+        volumes:
+            - '$$cap_appname-db:/var/lib/mysql'
+        # ports:
+        #     - '3306'
+        caproverExtra:
+            notExposeAsWebApp: 'true'
 caproverOneClickApp:
     variables:
-        - id: $$cap_gotrue_version
-          label: GoTrue Version
-          description: Choose the latest from https://hub.docker.com/r/supabase/gotrue/tags
-          defaultValue: v2.0.7
-          validRegex: /^v([0-9]+(\.[0-9]+)+)$/
-        - id: $$cap_postgres_version
-          label: Postgres Version
-          description: Choose the latest from https://hub.docker.com/_/postgres?tab=tags
-          validRegex: /^([0-9]+(\.[0-9]+)+)$/
-        - id: '$$cap_site_url'
-          label: SITE_URL
-          description: The base URL at which your site is located.
-          validRegex: /^[a-zA-Z]+://([a-zA-Z]+(\.[a-zA-Z]+)+)$/
+        - id: '$$cap_gotrue_jwt_secret'
+          label: JWT Secret
+          defaultValue: '$$cap_gen_random_hex(32)'
+          description: Secret string for signing JWTs. Must be more than 32 characters.
+          validRegex: 'Not yet valid regex'
+        
+        - id: '$$cap_gotrue_jwt_exp'
+          label: JWT Expiration
+          defaultValue: 3600
+          description: Time between JWT signing and expiration in seconds.
+          validRegex: 'Not yet valid regex'
         
     instructions:
         start: |-
-            GoTrue is an API developed by Netlify to handle user authentication. This is the version used by supabase.io, which tends to have faster development than Netlify's version.
+            GoTrue is an API developed by Netlify to handle user authentication. This is the version used by supabase.io.
             More details: https://github.com/supabase/gotrue
         end: |-
             GoTrue has been successfully deployed!
