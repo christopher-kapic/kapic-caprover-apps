@@ -69,7 +69,7 @@ caproverOneClickApp:
             More details: https://github.com/supabase/gotrue
         end: |-
             GoTrue has been successfully deployed!
-    displayName: "[WIP] Supabase GoTrue"
+    displayName: "[WIP] SuperTokens"
     isOfficial: false
     description: An open source authentication system developed by Netlify, forked by Supabase.
     documentation: See https://github.com/supabase/gotrue
