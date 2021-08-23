@@ -9,14 +9,14 @@ services:
             - $$cap_appname-db
         restart: always
         environment:
-            GOTRUE_JWT_SECRET: ${JWT_SECRET}
+            GOTRUE_JWT_SECRET: $$cap_jwt_secret
             GOTRUE_JWT_EXP: 3600
             GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
             GOTRUE_DB_DRIVER: postgres
             DB_NAMESPACE: auth
-            API_EXTERNAL_URL: http://localhost:8000
+            # API_EXTERNAL_URL: http://localhost:8000
             GOTRUE_API_HOST: 0.0.0.0
-            PORT: ${AUTH_PORT}
+            PORT: 9999
 
             GOTRUE_SMTP_HOST: ${SMTP_HOST}
             GOTRUE_SMTP_PORT: ${SMTP_PORT}
@@ -34,7 +34,7 @@ services:
             GOTRUE_OPERATOR_TOKEN: ${OPERATOR_TOKEN}
             DATABASE_URL: 'postgres://postgres:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/postgres?sslmode=disable'
         caproverExtra:
-            containerHttpPort: '8080'
+            containerHttpPort: 9999
     $$cap_appname-db:
         image: postgres:13.3
 caproverOneClickApp:
@@ -48,10 +48,15 @@ caproverOneClickApp:
           label: Postgres Version
           description: Choose the latest from https://hub.docker.com/_/postgres?tab=tags
           validRegex: /^([0-9]+(\.[0-9]+)+)$/
+          defaultValue: 13.4
         - id: '$$cap_site_url'
           label: SITE_URL
           description: The base URL at which your site is located.
           validRegex: /^[a-zA-Z]+://([a-zA-Z]+(\.[a-zA-Z]+)+)$/
+        - id: $$cap_jwt_secret
+          label: JWT Secret
+          description: A 32+ character string (do not expose in version control)
+          defaultValue: $$cap_gen_random_hex(32)
         
     instructions:
         start: |-
