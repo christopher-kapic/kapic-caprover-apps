@@ -15,6 +15,7 @@ services:
         depends_on:
             - $$cap_appname-db
         image: supertokens/supertokens-postgresql:$$cap_st_version
+        restart: always
         environment:
             API_KEYS:
             # SUPERTOKENS_HOST: localhost
