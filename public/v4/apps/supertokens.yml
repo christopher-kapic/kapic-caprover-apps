@@ -27,6 +27,7 @@ services:
             # MAX_SERVER_POOL_SIZE: 10
             DISABLE_TELEMETRY: true
             # DISABLE_TELEMETRY: false
+            POSTGRESQL_CONNECTION_URI: postgres://$$cap_pg_user:$$cap_pg_pass@srv-captain--$$cap_appname-db:5432/$$cap_pg_db
         caproverExtra:
             containerHttpPort: 3567
 caproverOneClickApp:
