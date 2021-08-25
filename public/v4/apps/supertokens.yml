@@ -9,6 +9,8 @@ services:
             POSTGRES_USER: $$cap_pg_user
             POSTGRES_PASSWORD: $$cap_pg_pass
             POSTGRES_DB: $$cap_pg_db
+        caproverExtra:
+            notExposeAsWebApp: 'true'
     $$cap_appname:
         depends_on:
             - $$cap_appname-db
