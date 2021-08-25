@@ -47,7 +47,7 @@ caproverOneClickApp:
           label: Postgres Version
           defaultValue: 13.4
           description: Choose the latest version of Postgres from https://hub.docker.com/_/postgres?tab=tags
-        - id: $cap_st_version
+        - id: $$cap_st_version
           label: SuperTokens Version
           description: Choose the latest version of SuperTokens from https://hub.docker.com/r/supertokens/supertokens-postgresql/tags
           defaultValue: 3.5
