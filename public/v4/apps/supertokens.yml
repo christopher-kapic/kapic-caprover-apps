@@ -34,7 +34,7 @@ services:
             POSTGRESQL_USER: $$cap_pg_user
             POSTGRESQL_PASSWORD: $$cap_pg_pass
             # POSTGRESQL_CONNECTION_POOL_SIZE
-            POSTGRESQL_HOST: srv--captain--$$cap_appname-db
+            POSTGRESQL_HOST: srv-captain--$$cap_appname-db
             POSTGRESQL_PORT: 5432
             POSTGRESQL_DATABASE_NAME: $$cap_pg_db
             # POSTGRESQL_TABLE_NAMES_PREFIX
