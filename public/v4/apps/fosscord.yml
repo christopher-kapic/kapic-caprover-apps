@@ -16,27 +16,20 @@ caproverOneClickApp:
     documentation: https://docs.fosscord.com/
 ########
 services:
-    $$cap_appname-appwrite:
-        image: appwrite/appwrite:latest
-        ports:
-            - $$cap_http_port:80
-            - $$cap_https_port:443
+    $$cap_appname-db:
+        image: mongo:latest
         volumes:
-            - $$cap_appname-appwrite-uploads:/storage/uploads
-            - $$cap_appname-appwrite-cache:/storage/cache
-            - $$cap_appname-appwrite-config:/storage/config
-            - $$cap_appname-appwrite-certificates:/storage/certificates
+            - $$cap_appname-db:/data/db
+        restart: unless-stopped
+    $$cap_appname-api:
+        image: fosscord/api
         depends_on:
-            - $$cap_appname-mariadb
-            - $$cap_appname-redis
-            - $$cap_appname-clamav
-            - $$cap_appname-influxdb
-            - $$cap_appname-telegraf
+            - $$cap_appname-db
         environment:
-            _APP_ENV: production
-            _APP_OPTIONS_FORCE_HTTPS: true
-            _APP_OPENSSL_KEY_V1: $$cap_secret_key
-            _APP_DOMAIN: http://$$cap_appname.$$cap_root_domain/
-            _APP_DOMAIN_TARGET: http://$$cap_appname.$$cap_root_domain/
-            _APP_CONSOLE_WHITELIST_EMAILS: $$cap_console_whitelist_emails
-            _APP_REDIS_HOST: srv-captain--$$cap_appname-redis
+            MONGO_URL=mongodb://$$cap_appname-db/fosscord?readPreference=secondaryPreferred
+    $$cap_appname-gateway:
+        image: fosscord/gateway
+        depends_on:
+            - $$cap_appname-db
+        environment:
+            MONGO_URL=mongodb://$$cap_appname-db/fosscord?readPreference=secondaryPreferred
