@@ -1,10 +1,10 @@
 captainVersion: 4
 caproverOneClickApp:
-    variables:
-        - label: HTTP Port
-          description: This is the HTTP port to access appwrite
-          defaultValue: '8000'
-          id: $$cap_http_port
+#     variables:
+#         - label: HTTP Port
+#           description: This is the HTTP port to access appwrite
+#           defaultValue: '8000'
+#           id: $$cap_http_port
     instructions:
         start: |-
             A free, open source, and selfhostable Discord compatible chat, voice and video platform.
