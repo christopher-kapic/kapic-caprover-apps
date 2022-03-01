@@ -50,7 +50,7 @@ caproverOneClickApp:
         - id: $$cap_st_version
           label: SuperTokens Version
           description: Choose the latest version of SuperTokens from https://hub.docker.com/r/supertokens/supertokens-postgresql/tags
-          defaultValue: 3.5
+          defaultValue: 3.10
         - id: $$cap_pg_user
           label: Postgres Username
           description: ''
