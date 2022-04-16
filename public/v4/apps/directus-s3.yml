@@ -72,7 +72,7 @@ caproverOneClickApp:
           label: S3 ACL
           description: S3 ACL
         - description: Tag of Directus image on https://hub.docker.com/r/directus/directus/tags
-          defaultValue: v9.0.0-rc.64
+          defaultValue: 9.9.0
           id: $$cap_directus_tag
           label: Directus image tag
           validRegex: /.{1,}/
