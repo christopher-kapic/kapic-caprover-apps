@@ -25,10 +25,17 @@ services:
             - $$cap_appname-redis
         image: directus/directus:$$cap_directus_tag
         volumes:
-            - $$cap_appname-uploads:/directus/uploads
             - $$cap_appname-extensions:/directus/extensions
         restart: always
         environment:
+            STORAGE_LOCATIONS: "s3"
+            STORAGE_S3_DRIVER: "s3"
+            STORAGE_S3_KEY: $$cap_directus_s3_key
+            STORAGE_S3_SECRET: $$cap_directus_s3_secret
+            STORAGE_S3_BUCKET: $$cap_directus_s3_bucket
+            STORAGE_S3_REGION: $$cap_directus_s3_region
+            STORAGE_S3_ENDPOINT: $$cap_directus_s3_endpoint
+            STORAGE_S3_ACL: $$cap_directus_s3_acl
             KEY: $$cap_directus_auth_public_key
             SECRET: $$cap_directus_auth_secret_key
             DB_CLIENT: 'pg'
@@ -46,6 +53,24 @@ services:
             containerHttpPort: '8055'
 caproverOneClickApp:
     variables:
+        - id: $$cap_directus_s3_key
+          description: S3 Key
+          label: S3 Key
+        - id: $$cap_directus_s3_secret
+          description: S3 Secret
+          label: S3 Secret
+        - id: $$cap_directus_s3_bucket
+          description: S3 Bucket
+          label: S3 Bucket
+        - id: $$cap_directus_s3_region
+          label: S3 Region
+          description: S3 Region
+        - id: $$cap_directus_s3_endpoint
+          label: S3 Endpoint
+          description: S3 Endpoint
+        - id: $$cap_directus_s3_acl
+          label: S3 ACL
+          description: S3 ACL
         - description: Tag of Directus image on https://hub.docker.com/r/directus/directus/tags
           defaultValue: v9.0.0-rc.64
           id: $$cap_directus_tag
