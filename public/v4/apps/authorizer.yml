@@ -20,7 +20,6 @@ services:
             ENV: production
             DATABASE_TYPE: postgres
             DATABASE_URL: postgres://authorizer:$$cap_pg_pass@srv-captain--$$cap_appname-db:5432/authorizer
-            # ADMIN_SECRET: $$cap_authorizer_admin_secret
             PORT: 8080
             AUTHORIZER_URL: https://$$cap_appname.$$cap_root_domain
             COOKIE_NAME: authorizer
@@ -44,12 +43,6 @@ caproverOneClickApp:
           defaultValue: $$cap_gen_random_hex(16)
           label: Postgres user password
           validRegex: /^(?=.*\d).{10,}$/
-        # - id: $$cap_authorizer_admin_secret
-        #   description: Super admin secret used to access the master data
-        #   defaultValue: $$cap_gen_random_hex(16)
-        #   label: ADMIN_SECRET
-        #   validRegex: /^(?=.*\d).{10,}$/
-
         
     instructions:
         start: |-
