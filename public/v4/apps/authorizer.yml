@@ -1,0 +1,76 @@
+captainVersion: 4
+services:
+    $$cap_appname-db:
+        image: postgres:$$cap_postgres_version
+        volumes:
+            - $$cap_appname-db-data:/var/lib/postgresql/data
+        restart: always
+        environment:
+            POSTGRES_USER: authorizer
+            POSTGRES_PASSWORD: $$cap_pg_pass
+            POSTGRES_DB: authorizer
+        caproverExtra:
+            notExposeAsWebApp: 'true'
+    $$cap_appname:
+        depends_on:
+            - $$cap_appname-db
+        image: lakhansamani/authorizer:$$cap_authorizer_version
+        restart: always
+        environment:
+            ENV: production
+            DATABASE_TYPE: postgres
+            DATABASE_URL: postgres://authorizer:$$cap_pg_pass@srv-captain--$$cap_appname-db:5432/authorizer
+            ADMIN_SECRET: $$cap_authorizer_admin_secret
+            PORT: 8080
+            AUTHORIZER_URL: https://$$cap_appname.$$cap_root_domain
+            COOKIE_NAME: authorizer
+            SMTP_HOST: smtp_host
+            SMTP_USERNAME: smtp_username
+            SMTP_PASSWORD: smtp_password
+            SENDER_EMAIL: sender_email
+            RESET_PASSWORD_URL: "/reset-password"
+            DISABLE_BASIC_AUTHENTICATION: false
+            DISABLE_EMAIL_VERIFICATION: false
+            DISABLE_MAGIC_LINK_LOGIN: false
+            DISABLE_LOGIN_PAGE: false
+            DISABLE_SIGN_UP: false
+            ROLES: user,admin
+            DEFAULT_ROLES: user
+            PROTECTED_ROLES: " "
+            JWT_ROLE_CLAIM: role
+            ORGANIZATION_NAME: Authorizer
+            ACCESS_TOKEN_EXPIRY_TIME: 30m
+        caproverExtra:
+            containerHttpPort: 8080
+caproverOneClickApp:
+    variables:
+        - id: $$cap_postgres_version
+          label: Postgres Version
+          defaultValue: 15.1
+          description: Choose the latest version of Postgres from https://hub.docker.com/_/postgres?tab=tags
+        - id: $$cap_authorizer_version
+          label: Authorizer Version
+          description: Choose the latest version of Authorizer from https://hub.docker.com/r/lakhansamani/authorizer/tags
+          defaultValue: 1.1.30
+        - id: $$cap_pg_pass
+          description: User password for the Authorizer database instance.
+          defaultValue: $$cap_gen_random_hex(16)
+          label: Postgres user password
+          validRegex: /^(?=.*\d).{10,}$/
+        - id: $$cap_authorizer_admin_secret
+          description: Super admin secret used to access the master data
+          defaultValue: $$cap_gen_random_hex(16)
+          label: ADMIN_SECRET
+          validRegex: /^(?=.*\d).{10,}$/
+
+        
+    instructions:
+        start: |-
+            Authorizer is an open source authentication solution.
+            More details: https://authorizer.dev/
+        end: |-
+            Authorizer has been successfully deployed and is available <a href="http://$$cap_appname.$$cap_root_domain">here</a>. Make sure to enable HTTPS!
+    displayName: Authorizer
+    isOfficial: false
+    description: Authenticate & Authorize Users For Free
+    documentation: https://docs.authorizer.dev/
