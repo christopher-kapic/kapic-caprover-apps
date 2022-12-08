@@ -24,20 +24,7 @@ services:
             PORT: 8080
             AUTHORIZER_URL: https://$$cap_appname.$$cap_root_domain
             COOKIE_NAME: authorizer
-            SMTP_HOST: smtp_host
-            SMTP_USERNAME: smtp_username
-            SMTP_PASSWORD: smtp_password
-            SENDER_EMAIL: sender_email
             RESET_PASSWORD_URL: "/reset-password"
-            DISABLE_BASIC_AUTHENTICATION: false
-            DISABLE_EMAIL_VERIFICATION: false
-            DISABLE_MAGIC_LINK_LOGIN: false
-            DISABLE_LOGIN_PAGE: false
-            DISABLE_SIGN_UP: false
-            ROLES: user,admin
-            DEFAULT_ROLES: user
-            PROTECTED_ROLES: " "
-            JWT_ROLE_CLAIM: role
             ORGANIZATION_NAME: Authorizer
             ACCESS_TOKEN_EXPIRY_TIME: 30m
         caproverExtra:
