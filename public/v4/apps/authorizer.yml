@@ -11,6 +11,12 @@ services:
             POSTGRES_DB: authorizer
         caproverExtra:
             notExposeAsWebApp: 'true'
+    $$cap_appname-redis:
+        image: redis:$$cap_redis_version
+        volumes:
+            - $$cap_appname-redis:/data
+        caproverExtra:
+            notExposeAsWebApp: 'true'
     $$cap_appname:
         depends_on:
             - $$cap_appname-db
@@ -26,10 +32,15 @@ services:
             RESET_PASSWORD_URL: "/reset-password"
             ORGANIZATION_NAME: Authorizer
             ACCESS_TOKEN_EXPIRY_TIME: 30m
+            REDIS_URL: redis://srv-captain--$$cap_appname-redis:6379
         caproverExtra:
             containerHttpPort: 8080
 caproverOneClickApp:
     variables:
+        - id: $$cap_redis_version
+          label: Redis Version
+          defaultValue: 7.0.5
+          description: Choose the latest version of Redis from https://hub.docker.com/_/redis/tags
         - id: $$cap_postgres_version
           label: Postgres Version
           defaultValue: 15.1
